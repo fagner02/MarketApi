@@ -39,7 +39,9 @@ namespace market_api {
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepository<Product>, ProductRepository>();
-            services.AddScoped<ProductS>();
+            services.AddScoped<IRepository<Category>, CategoryRepository>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<CategoryService>();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "market_api", Version = "v1" });
             });

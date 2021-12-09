@@ -7,10 +7,10 @@ using market_api.Dtos;
 namespace market_api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsC : ControllerBase {
-        private readonly ProductS _productService;
+    public class ProductsController : ControllerBase {
+        private readonly ProductService _productService;
 
-        public ProductsC(ProductS productService) {
+        public ProductsController(ProductService productService) {
             _productService = productService;
         }
 

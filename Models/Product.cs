@@ -3,8 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace market_api.Models {
-    public class Product {
-        public Guid ProductId { get; set; }
+    public class Product : Entity {
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

@@ -8,6 +8,7 @@ namespace market_api.Mapping {
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>();
             CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
         }
     }
 }

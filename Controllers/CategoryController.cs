@@ -1,62 +1,53 @@
 using System.Collections.Generic;
-using market_api.Context;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
-using market_api.Models;
-using System.Linq;
 using System;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using market_api.Services;
+using market_api.Dtos;
 
 namespace market_api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriesController : ControllerBase {
-        private readonly Db _data;
+    public class CategoryController : ControllerBase {
+        private readonly CategoryService _categoryService;
 
-        public CategoriesController(Db data) {
-            _data = data;
+        public CategoryController(CategoryService categoryService) {
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetCategories() {
-            return await _data.Categories.ToListAsync();
+        public ActionResult<List<CategoryDto>> GetProducts() {
+            return Ok(_categoryService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory([FromRoute] Guid id) {
-            Category temp = await _data.Categories.FirstAsync(x => x.CategoryId == id);
+        public ActionResult<CategoryDto> GetProduct([FromRoute] Guid id) {
+            CategoryDto temp = _categoryService.Get(id);
             if (temp == null) {
                 return NotFound();
             }
-            return temp;
+            return Ok(temp);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Category category) {
-            _data.Categories.Add(category);
-            await _data.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryId }, category);
+        public ActionResult Post([FromBody] CategoryDto category) {
+            _categoryService.Create(category);
+            return Ok(category);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put([FromBody] Category category) {
-            if (!_data.Categories.Contains(category)) {
+        public ActionResult Put([FromRoute] Guid id, [FromBody] CategoryDto category) {
+            if (!_categoryService.Update(id, category)) {
                 return NotFound();
             }
-            _data.Categories.Update(category);
-            await _data.SaveChangesAsync();
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute] Guid id) {
-            Category temp = await _data.Categories.FirstAsync(x => x.CategoryId == id);
-            if (temp == null) {
+        public ActionResult Delete([FromRoute] Guid id) {
+            if (!_categoryService.Delete(id)) {
                 return NotFound();
             }
-            _data.Categories.Remove(temp);
-            await _data.SaveChangesAsync();
             return NoContent();
         }
     }
