@@ -19,7 +19,7 @@ namespace market_api.Repositories {
         }
 
         public Product Get(Guid id) {
-            return _data.Products.FirstOrDefault(x => x.ProductId == id);
+            return _data.Products.FirstOrDefault(x => x.Id == id);
         }
 
         public void Create(Product product) {
@@ -28,8 +28,8 @@ namespace market_api.Repositories {
         }
 
         public bool Update(Guid id, Product product) {
-            product.ProductId = id;
-            Product temp = _data.Products.FirstOrDefault(x => x.ProductId == id);
+            product.Id = id;
+            Product temp = _data.Products.FirstOrDefault(x => x.Id == id);
             if (temp == null) {
                 return false;
             }
@@ -40,7 +40,7 @@ namespace market_api.Repositories {
         }
 
         public bool Delete(Guid id) {
-            var temp = _data.Products.FirstOrDefault(x => x.ProductId == id);
+            var temp = _data.Products.FirstOrDefault(x => x.Id == id);
             if (temp == null) {
                 return false;
             }

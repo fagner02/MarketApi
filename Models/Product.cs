@@ -9,8 +9,5 @@ namespace market_api.Models {
         public decimal Price { get; set; }
         public Guid CategoryId { get; set; }
         public DateTime Time { get; set; }
-        public int BB() {
-            return 89;
-        }
     }
 }
