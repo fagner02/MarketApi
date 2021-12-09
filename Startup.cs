@@ -16,7 +16,7 @@ using market_api.Models;
 using market_api.Context;
 using Microsoft.EntityFrameworkCore;
 using market_api.Services;
-
+using market_api.Dtos;
 
 namespace market_api {
     public class Startup {
@@ -40,8 +40,8 @@ namespace market_api {
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepository<Product>, ProductRepository>();
             services.AddScoped<IRepository<Category>, CategoryRepository>();
-            services.AddScoped<ProductService>();
-            services.AddScoped<CategoryService>();
+            services.AddScoped<IService<ProductDto>, ProductService>();
+            services.AddScoped<IService<CategoryDto>, CategoryService>();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "market_api", Version = "v1" });
             });

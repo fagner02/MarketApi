@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace market_api.Services {
-    interface IService<T> where T : class {
+    public interface IService<T> where T : class {
         IEnumerable<T> GetAll();
 
         T Get(Guid id);
