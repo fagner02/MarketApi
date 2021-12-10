@@ -4,6 +4,7 @@ using System.Linq;
 using market_api.Models;
 using market_api.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace market_api.Repositories {
 
@@ -14,38 +15,38 @@ namespace market_api.Repositories {
             _data = data;
         }
 
-        public IEnumerable<Category> GetAll() {
-            return _data.Categories.ToList();
+        public async Task<IEnumerable<Category>> GetAll() {
+            return await _data.Categories.ToListAsync();
         }
 
-        public Category Get(Guid id) {
-            return _data.Categories.FirstOrDefault(x => x.Id == id);
+        public async Task<Category> Get(Guid id) {
+            return await _data.Categories.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Create(Category product) {
-            _data.Categories.Add(product);
-            _data.SaveChanges();
+        public async Task Create(Category product) {
+            await _data.Categories.AddAsync(product);
+            await _data.SaveChangesAsync();
         }
 
-        public bool Update(Guid id, Category product) {
+        public async Task<bool> Update(Guid id, Category product) {
             product.Id = id;
-            Category temp = _data.Categories.FirstOrDefault(x => x.Id == id);
+            Category temp = await _data.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (temp == null) {
                 return false;
             }
             _data.Entry(temp).State = EntityState.Detached;
             _data.Categories.Update(product);
-            _data.SaveChanges();
+            await _data.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid id) {
-            var temp = _data.Categories.FirstOrDefault(x => x.Id == id);
+        public async Task<bool> Delete(Guid id) {
+            var temp = await _data.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (temp == null) {
                 return false;
             }
             _data.Categories.Remove(temp);
-            _data.SaveChanges();
+            await _data.SaveChangesAsync();
             return true;
         }
     }

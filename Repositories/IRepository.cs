@@ -1,12 +1,13 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 
 namespace market_api.Repositories {
-    public interface IRepository<T> where T : class {
-        IEnumerable<T> GetAll();
-        T Get(Guid id);
-        void Create(T item);
-        bool Update(Guid id, T item);
-        bool Delete(Guid id);
+    public interface IRepository<T> {
+        Task<IEnumerable<T>> GetAll();
+        Task<T> Get(Guid id);
+        Task Create(T item);
+        Task<bool> Update(Guid id, T item);
+        Task<bool> Delete(Guid id);
     }
 }

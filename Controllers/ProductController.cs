@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,20 +9,20 @@ namespace market_api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase {
-        private readonly ProductService _productService;
+        private readonly IService<ProductDto, ProductCreateDto> _productService;
 
-        public ProductsController(ProductService productService) {
+        public ProductsController(IService<ProductDto, ProductCreateDto> productService) {
             _productService = productService;
         }
 
         [HttpGet]
-        public ActionResult<List<ProductDto>> GetProducts() {
-            return Ok(_productService.GetAll());
+        public async Task<ActionResult<List<ProductDto>>> GetProducts() {
+            return Ok(await _productService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductDto> GetProduct([FromRoute] Guid id) {
-            ProductDto temp = _productService.Get(id);
+        public async Task<ActionResult<ProductDto>> GetProduct([FromRoute] Guid id) {
+            ProductDto temp = await _productService.Get(id);
             if (temp == null) {
                 return NotFound();
             }
@@ -29,14 +30,14 @@ namespace market_api.Controllers {
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ProductDto product) {
-            _productService.Create(product);
+        public async Task<ActionResult> Post([FromBody] ProductCreateDto product) {
+            await _productService.Create(product);
             return Ok(product);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put([FromRoute] Guid id, [FromBody] ProductDto product) {
-            if (!_productService.Update(id, product)) {
+        public async Task<ActionResult> Put([FromRoute] Guid id, [FromBody] ProductDto product) {
+            if (!await _productService.Update(id, product)) {
                 return NotFound();
             }
 
@@ -44,8 +45,8 @@ namespace market_api.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] Guid id) {
-            if (!_productService.Delete(id)) {
+        public async Task<ActionResult> Delete([FromRoute] Guid id) {
+            if (!await _productService.Delete(id)) {
                 return NotFound();
             }
             return NoContent();

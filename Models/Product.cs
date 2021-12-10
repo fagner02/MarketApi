@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace market_api.Models {
     public class Product : Entity {

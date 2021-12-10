@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,38 +15,38 @@ namespace market_api.Repositories {
             _data = data;
         }
 
-        public IEnumerable<Product> GetAll() {
-            return _data.Products.ToList();
+        public async Task<IEnumerable<Product>> GetAll() {
+            return await _data.Products.ToListAsync();
         }
 
-        public Product Get(Guid id) {
-            return _data.Products.FirstOrDefault(x => x.Id == id);
+        public async Task<Product> Get(Guid id) {
+            return await _data.Products.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Create(Product product) {
-            _data.Products.Add(product);
-            _data.SaveChanges();
+        public async Task Create(Product product) {
+            await _data.Products.AddAsync(product);
+            await _data.SaveChangesAsync();
         }
 
-        public bool Update(Guid id, Product product) {
+        public async Task<bool> Update(Guid id, Product product) {
             product.Id = id;
-            Product temp = _data.Products.FirstOrDefault(x => x.Id == id);
+            Product temp = await _data.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (temp == null) {
                 return false;
             }
             _data.Entry(temp).State = EntityState.Detached;
             _data.Products.Update(product);
-            _data.SaveChanges();
+            await _data.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid id) {
-            var temp = _data.Products.FirstOrDefault(x => x.Id == id);
+        public async Task<bool> Delete(Guid id) {
+            var temp = await _data.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (temp == null) {
                 return false;
             }
             _data.Products.Remove(temp);
-            _data.SaveChanges();
+            await _data.SaveChangesAsync();
             return true;
         }
     }

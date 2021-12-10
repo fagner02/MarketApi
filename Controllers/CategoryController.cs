@@ -3,25 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using market_api.Services;
 using market_api.Dtos;
+using System.Threading.Tasks;
 
 namespace market_api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase {
-        private readonly CategoryService _categoryService;
+        private readonly IService<CategoryDto, CategoryCreateDto> _categoryService;
 
-        public CategoryController(CategoryService categoryService) {
+        public CategoryController(IService<CategoryDto, CategoryCreateDto> categoryService) {
             _categoryService = categoryService;
         }
 
         [HttpGet]
-        public ActionResult<List<CategoryDto>> GetProducts() {
-            return Ok(_categoryService.GetAll());
+        public async Task<ActionResult<List<CategoryDto>>> GetProducts() {
+            return Ok(await _categoryService.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CategoryDto> GetProduct([FromRoute] Guid id) {
-            CategoryDto temp = _categoryService.Get(id);
+        public async Task<ActionResult<CategoryDto>> GetProduct([FromRoute] Guid id) {
+            CategoryDto temp = await _categoryService.Get(id);
             if (temp == null) {
                 return NotFound();
             }
@@ -29,14 +30,14 @@ namespace market_api.Controllers {
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] CategoryDto category) {
-            _categoryService.Create(category);
+        public async Task<ActionResult> Post([FromBody] CategoryCreateDto category) {
+            await _categoryService.Create(category);
             return Ok(category);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put([FromRoute] Guid id, [FromBody] CategoryDto category) {
-            if (!_categoryService.Update(id, category)) {
+        public async Task<ActionResult> Put([FromRoute] Guid id, [FromBody] CategoryDto category) {
+            if (!await _categoryService.Update(id, category)) {
                 return NotFound();
             }
 
@@ -44,8 +45,8 @@ namespace market_api.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] Guid id) {
-            if (!_categoryService.Delete(id)) {
+        public async Task<ActionResult> Delete([FromRoute] Guid id) {
+            if (!await _categoryService.Delete(id)) {
                 return NotFound();
             }
             return NoContent();

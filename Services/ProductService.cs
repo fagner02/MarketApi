@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using market_api.Models;
 using System;
@@ -6,7 +7,7 @@ using market_api.Repositories;
 using AutoMapper;
 
 namespace market_api.Services {
-    public class ProductService : IService<ProductDto> {
+    public class ProductService : IService<ProductDto, ProductCreateDto> {
         private readonly IMapper _mapper;
         private readonly IRepository<Product> _repo;
 
@@ -16,25 +17,25 @@ namespace market_api.Services {
             _repo = repo;
         }
 
-        public IEnumerable<ProductDto> GetAll() {
-            return _mapper.Map<IEnumerable<ProductDto>>(_repo.GetAll());
+        public async Task<IEnumerable<ProductDto>> GetAll() {
+            return _mapper.Map<IEnumerable<ProductDto>>(await _repo.GetAll());
         }
 
-        public ProductDto Get(Guid id) {
-            return _mapper.Map<ProductDto>(_repo.Get(id));
+        public async Task<ProductDto> Get(Guid id) {
+            return _mapper.Map<ProductDto>(await _repo.Get(id));
         }
 
-        public ProductDto Create(ProductDto product) {
-            _repo.Create(_mapper.Map<Product>(product));
+        public async Task<ProductCreateDto> Create(ProductCreateDto product) {
+            await _repo.Create(_mapper.Map<Product>(product));
             return product;
         }
 
-        public bool Update(Guid id, ProductDto product) {
-            return _repo.Update(id, _mapper.Map<Product>(product));
+        public async Task<bool> Update(Guid id, ProductDto product) {
+            return await _repo.Update(id, _mapper.Map<Product>(product));
         }
 
-        public bool Delete(Guid id) {
-            return _repo.Delete(id);
+        public async Task<bool> Delete(Guid id) {
+            return await _repo.Delete(id);
         }
     }
 }

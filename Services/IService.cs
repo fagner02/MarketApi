@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace market_api.Services {
-    public interface IService<T> where T : class {
-        IEnumerable<T> GetAll();
+    public interface IService<T, T1> {
+        Task<IEnumerable<T>> GetAll();
 
-        T Get(Guid id);
+        Task<T> Get(Guid id);
 
-        T Create(T obj);
+        Task<T1> Create(T1 obj);
 
-        bool Update(Guid id, T obj);
+        Task<bool> Update(Guid id, T obj);
 
-        bool Delete(Guid id);
+        Task<bool> Delete(Guid id);
     }
 }
