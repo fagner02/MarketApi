@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,14 +10,14 @@ namespace market_api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase {
-        private readonly IService<CategoryDto, CategoryCreateDto> _categoryService;
+        private readonly CategoryService _categoryService;
 
-        public CategoryController(IService<CategoryDto, CategoryCreateDto> categoryService) {
+        public CategoryController(CategoryService categoryService) {
             _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CategoryDto>>> GetProducts() {
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetProducts() {
             return Ok(await _categoryService.GetAll());
         }
 
@@ -50,6 +51,11 @@ namespace market_api.Controllers {
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [HttpGet("{id}/products")]
+        public async Task<IEnumerable<ProductDto>> GetProducts([FromRoute] Guid id) {
+            return await _categoryService.GetDetails(id);
         }
     }
 }

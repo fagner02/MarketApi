@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace market_api.Repositories {
 
-    public class CategoryRepository : IRepository<Category> {
+    public class CategoryRepository : IRepository<Category, IEnumerable<Product>> {
         private readonly Db _data;
 
         public CategoryRepository(Db data) {
@@ -48,6 +48,10 @@ namespace market_api.Repositories {
             _data.Categories.Remove(temp);
             await _data.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<Product>> GetDetails(Guid id) {
+            return await _data.Products.Where(x => x.CategoryId == id).ToListAsync();
         }
     }
 }

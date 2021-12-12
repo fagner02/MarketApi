@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace market_api.Services {
     public class CategoryService : IService<CategoryDto, CategoryCreateDto> {
         private readonly IMapper _mapper;
-        private readonly IRepository<Category> _repo;
+        private readonly CategoryRepository _repo;
 
 
-        public CategoryService(IMapper mapper, IRepository<Category> repo) {
+        public CategoryService(IMapper mapper, CategoryRepository repo) {
             _mapper = mapper;
             _repo = repo;
         }
@@ -36,6 +36,10 @@ namespace market_api.Services {
 
         public async Task<bool> Delete(Guid id) {
             return await _repo.Delete(id);
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetDetails(Guid id) {
+            return _mapper.Map<IEnumerable<ProductDto>>(await _repo.GetDetails(id));
         }
     }
 }

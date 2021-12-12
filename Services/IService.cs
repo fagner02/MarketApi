@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace market_api.Services {
-    public interface IService<T, T1> {
-        Task<IEnumerable<T>> GetAll();
+    public interface IService<Dto, DtoCreate> {
+        Task<IEnumerable<Dto>> GetAll();
 
-        Task<T> Get(Guid id);
+        Task<Dto> Get(Guid id);
 
-        Task<T1> Create(T1 obj);
+        Task<DtoCreate> Create(DtoCreate obj);
 
-        Task<bool> Update(Guid id, T obj);
+        Task<bool> Update(Guid id, Dto obj);
 
         Task<bool> Delete(Guid id);
     }

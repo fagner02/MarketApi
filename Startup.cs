@@ -31,10 +31,10 @@ namespace market_api {
             services.AddDbContextPool<Db>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IRepository<Product>, ProductRepository>();
-            services.AddScoped<IRepository<Category>, CategoryRepository>();
-            services.AddScoped<IService<ProductDto, ProductCreateDto>, ProductService>();
-            services.AddScoped<IService<CategoryDto, CategoryCreateDto>, CategoryService>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<CategoryRepository>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<CategoryService>();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "market_api", Version = "v1" });
             });

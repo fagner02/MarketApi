@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace market_api.Repositories {
 
-    public class ProductRepository : IRepository<Product> {
+    public class ProductRepository : IRepository<Product, Category> {
         private readonly Db _data;
 
         public ProductRepository(Db data) {
@@ -48,6 +48,11 @@ namespace market_api.Repositories {
             _data.Products.Remove(temp);
             await _data.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Category> GetDetails(Guid id) {
+            Product temp = await Get(id);
+            return await _data.Categories.FirstOrDefaultAsync(x => x.Id == temp.CategoryId);
         }
     }
 }

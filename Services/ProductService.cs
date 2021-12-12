@@ -9,10 +9,10 @@ using AutoMapper;
 namespace market_api.Services {
     public class ProductService : IService<ProductDto, ProductCreateDto> {
         private readonly IMapper _mapper;
-        private readonly IRepository<Product> _repo;
+        private readonly ProductRepository _repo;
 
 
-        public ProductService(IMapper mapper, IRepository<Product> repo) {
+        public ProductService(IMapper mapper, ProductRepository repo) {
             _mapper = mapper;
             _repo = repo;
         }
@@ -36,6 +36,10 @@ namespace market_api.Services {
 
         public async Task<bool> Delete(Guid id) {
             return await _repo.Delete(id);
+        }
+
+        public async Task<CategoryDto> GetDetails(Guid id) {
+            return _mapper.Map<CategoryDto>(await _repo.GetDetails(id));
         }
     }
 }
